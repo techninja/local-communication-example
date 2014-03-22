@@ -52,14 +52,23 @@ void setupSerial() {
 
 void loop() {
   if (client.connected()) {
+    if (!serialSetup) setupSerial();
+
+    // Push data straight through to the serial port
     if (client.available()) {
-      char pin = client.read() - '0' + D0;
-      char level = client.read();
-      if ('h' == level) {
-        digitalWrite(pin, HIGH);
-      } else {
-        digitalWrite(pin, LOW);
-      }
+      digitalWrite(led, HIGH);
+      Serial1.print(char(client.read()));
+      digitalWrite(led, LOW);
     }
+
+    // Push data straight out through to the server
+    if (Serial1.available() > 0) {
+      digitalWrite(led, HIGH);
+      client.print(char(Serial1.read()));
+      digitalWrite(led, LOW);
+    }
+  } else {
+    // Should allow for clean disconnects and reconnects at new speeds
+    serialSetup = false;
   }
 }
