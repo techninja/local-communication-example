@@ -30,6 +30,8 @@ void setup() {
 // and therefore cannot be part of setup()
 void setupSerial() {
   serialSetup = true;
+  client.print("Serial begin at ");
+  client.println(speed);
   Serial1.begin(speed);
 }
 
