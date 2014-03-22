@@ -23,10 +23,14 @@ int connectToMyServer(String ip) {
 
 void setup() {
   Spark.function("connect", connectToMyServer);
+  pinMode(led, OUTPUT);
+ }
 
-  for (int pin = D0; pin <= D7; ++pin) {
-    pinMode(pin, OUTPUT);
-  }
+// Stub function for setting up serial because speed is set at connect time
+// and therefore cannot be part of setup()
+void setupSerial() {
+  serialSetup = true;
+  Serial1.begin(speed);
 }
 
 void loop() {
