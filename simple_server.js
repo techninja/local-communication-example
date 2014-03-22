@@ -29,5 +29,8 @@ var server = net.createServer(function(socket){
     socket.write(d);
     process.stdout.write('>> ');
   });
+  socket.on('data', function(data) {
+    process.stdout.write(data);
+  });
 });
 server.listen(PORT);
