@@ -1,5 +1,11 @@
 TCPClient client;
 
+// Globals!
+String cmd = "";
+int led = 7;
+long speed = 9600;
+bool serialSetup = false;
+
 void ipArrayFromString(byte ipArray[], String ipString) {
   int dot1 = ipString.indexOf('.');
   ipArray[0] = ipString.substring(0, dot1).toInt();
