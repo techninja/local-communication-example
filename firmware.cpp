@@ -5,6 +5,7 @@ String cmd = "";
 int led = 7;
 long speed = 9600;
 bool serialSetup = false;
+String serialBuffer = "";
 
 // Convert IP string into byte array
 void ipArrayFromString(byte ipArray[], String ipString) {
@@ -61,12 +62,20 @@ void loop() {
       digitalWrite(led, LOW);
     }
 
-    // Push data straight out through to the server
-    if (Serial1.available() > 0) {
-      digitalWrite(led, HIGH);
-      client.print(char(Serial1.read()));
-      digitalWrite(led, LOW);
+    // Push data through the socket when full line outputted
+    while (Serial1.available() > 0) {
+        char c = Serial1.read();
+        serialBuffer += c;
+        digitalWrite(led, HIGH);
+
+        // Process message when newline char received
+        if (c == '\n')  {
+            client.print(serialBuffer);
+            serialBuffer = ""; // Clear buffer
+            digitalWrite(led, LOW);
+        }
     }
+
   } else {
     // Should allow for clean disconnects and reconnects at new speeds
     serialSetup = false;
